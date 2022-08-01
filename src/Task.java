@@ -52,4 +52,12 @@ public class Task {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "Назавание:" + getTitle()
+                + "\n Описание:" + getDescription()
+                + "\n id=" + getId()
+                + "\n Статус:" + getStatus();
+    }
 }

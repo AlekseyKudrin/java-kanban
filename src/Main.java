@@ -19,7 +19,6 @@ public class Main {
         manager.addEpic(epicOne);
         manager.addEpic(epicTwo);
 
-
         //Обновление подзадачи
         SubTask upSubThree = new SubTask("two", "testSubTuskTwo", "DONE",5,6);
         manager.updateSubTask(upSubThree);
@@ -37,7 +36,7 @@ public class Main {
         manager.printAllSubTask();
 
         manager.printTargetTask(2);
-        manager.printTargetEpic(5);
+        manager.printTargetEpic(6);
         manager.printTargetSubTask(3);
         manager.printAllSubTaskEpic(7);
 

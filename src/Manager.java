@@ -1,64 +1,65 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Manager {
     private int id = 1;
-    private HashMap<Integer, Task> taskList = new HashMap<>();
-    private HashMap<Integer, Epic> epicList = new HashMap<>();
-    private HashMap<Integer, SubTask> subTaskList = new HashMap<>();
+    private static final String NEW = "NEW";
+    private static final String IN_PROGRESS = "IN_PROGRESS";
+    private static final String DONE = "DONE";
+    private Map<Integer, Task> tasks = new HashMap<>();
+    private Map<Integer, Epic> epics = new HashMap<>();
+    private Map<Integer, SubTask> subTasks = new HashMap<>();
 
     void addTask(Task task) {
         task.setId(id);
-        taskList.put(id++, task);
+        tasks.put(id++, task);
     }
 
     void addEpic(Epic epic) {
         epic.setId(id);
         epic.setStatus(assignEpicStatus(id));
-        epicList.put(id++, epic);
-        for (Integer key: subTaskList.keySet()) {
-            if (subTaskList.get(key).getEpicId() == epic.getId()) {
-                epic.epicTask.add(subTaskList.get(key));
+        epics.put(id++, epic);
+        for (Integer key: subTasks.keySet()) {
+            if (subTasks.get(key).getEpicId() == epic.getId()) {
+                epic.subTaskIds.add(subTasks.get(key).id);
             }
         }
 
     }
 
     void addSubTask(SubTask subTask) {
-        if (epicList.containsKey(subTask.epicId)) {
+        if (epics.containsKey(subTask.epicId)) {
             subTask.setId(id++);
-            epicList.get(subTask.getEpicId()).epicTask.add(subTask);
+            epics.get(subTask.getEpicId()).subTaskIds.add(subTask.id);
         } else {
             subTask.setId(id);
-            subTaskList.put(id++, subTask);
+            subTasks.put(id++, subTask);
         }
     }
 
     void updateTask(Task task) {
-        taskList.put(task.getId(), task);
+        tasks.put(task.getId(), task);
     }
 
     void updateEpic(Epic epic) {
-        epicList.put(epic.getId(), epic);
+        epics.put(epic.getId(), epic);
         epic.setStatus(assignEpicStatus(epic.getId()));
     }
 
     void updateSubTask(SubTask subTask) {
-        subTaskList.put(subTask.getId(), subTask);
-        if (epicList.containsKey(subTask.getEpicId())) {
-            Epic epic = epicList.get(subTask.getEpicId());
+        subTasks.put(subTask.getId(), subTask);
+        if (epics.containsKey(subTask.getEpicId())) {
+            Epic epic = epics.get(subTask.getEpicId());
             epic.setStatus(assignEpicStatus(epic.getId()));
         }
     }
 
     void printTargetTask(int id) {
-        for (int key: taskList.keySet()) {
-            if (id == taskList.get(key).getId()) {
-                System.out.println("задача под id " + id
-                        + "\n Назавание:" + taskList.get(key).getTitle()
-                        + "\n Описание:" + taskList.get(key).getDescription()
-                        + "\n id=" + taskList.get(key).getId()
-                        + "\n Статус:" + taskList.get(key).getStatus());
+        for (int key: tasks.keySet()) {
+            if (id == tasks.get(key).getId()) {
+                System.out.println("задача под id " + id);
+                System.out.println(tasks.get(key));
                 return;
             }
         }
@@ -66,14 +67,10 @@ public class Manager {
     }
 
     void printTargetEpic(int id) {
-        for (int key: epicList.keySet()) {
-            if (id == epicList.get(key).getId()) {
-                System.out.println("Глобальная задача под id " + id
-                        + "\n Назавание:" + epicList.get(key).getTitle()
-                        + "\n Описание:" + epicList.get(key).getDescription()
-                        + "\n id=" + epicList.get(key).getId()
-                        + "\n Статус:" + epicList.get(key).getStatus()
-                        + "\n Содержит в себе " + epicList.get(key).epicTask.size() +" подзадачу(и)");
+        for (int key: epics.keySet()) {
+            if (id == epics.get(key).getId()) {
+                System.out.println("Глобальная задача под id " + id);
+                System.out.println(epics.get(key));
                 return;
             }
         }
@@ -81,14 +78,10 @@ public class Manager {
     }
 
     void printTargetSubTask(int id) {
-        for (int key: subTaskList.keySet()) {
-            if (id == subTaskList.get(key).getId()) {
-                System.out.println("Подзадача под id " + id
-                        + "\n Назавание:" + subTaskList.get(key).getTitle()
-                        + "\n Описание:" + subTaskList.get(key).getDescription()
-                        + "\n id=" + subTaskList.get(key).getId()
-                        + "\n Статус:" + subTaskList.get(key).getStatus()
-                        + "\n относится к глобальгой задаче id " + subTaskList.get(key).getEpicId());
+        for (int key: subTasks.keySet()) {
+            if (id == subTasks.get(key).getId()) {
+                System.out.println("Подзадача под id " + id);
+                System.out.println(subTasks.get(key)        );
                 return;
             }
         }
@@ -98,12 +91,12 @@ public class Manager {
     void printAllTask() {
         int i = 1;
         System.out.println("Список всех задач:");
-        for (int key : taskList.keySet()) {
+        for (int key : tasks.keySet()) {
             System.out.println("задача №" + i
-                    + "\n Назавание:" +taskList.get(key).getTitle()
-                    + "\n Описание:" +taskList.get(key).getDescription()
-                    + "\n id="+ taskList.get(key).getId()
-                    + "\n Статус:"+ taskList.get(key).getStatus());
+                    + "\n Назавание:" + tasks.get(key).getTitle()
+                    + "\n Описание:" + tasks.get(key).getDescription()
+                    + "\n id="+ tasks.get(key).getId()
+                    + "\n Статус:"+ tasks.get(key).getStatus());
             i++;
         }
     }
@@ -111,13 +104,13 @@ public class Manager {
     void printAllEpic() {
         int i = 1;
         System.out.println("Список всех глобальных задач:");
-        for (int key : epicList.keySet()) {
+        for (int key : epics.keySet()) {
             System.out.println("Глобальная задача №" + i
-                    + "\n Назавание:" + epicList.get(key).getStatus()
-                    + "\n Описание:" + epicList.get(key).getDescription()
-                    + "\n id=" + epicList.get(key).getId()
-                    + "\n Статус:" + epicList.get(key).getStatus()
-                    + "\n Содержит в себе " + epicList.get(key).epicTask.size() +" подзадачу(и)");
+                    + "\n Назавание:" + epics.get(key).getStatus()
+                    + "\n Описание:" + epics.get(key).getDescription()
+                    + "\n id=" + epics.get(key).getId()
+                    + "\n Статус:" + epics.get(key).getStatus()
+                    + "\n Содержит в себе " + epics.get(key).subTaskIds.size() +" подзадачу(и)");
             i++;
         }
     }
@@ -125,13 +118,13 @@ public class Manager {
     void printAllSubTask() {
         int i = 1;
         System.out.println("Список всех подзадач:");
-        for (int key : subTaskList.keySet()) {
+        for (int key : subTasks.keySet()) {
             System.out.println("подзадача №" + i
-                    + "\n Назавание:" + subTaskList.get(key).getTitle()
-                    + "\n Описание:" + subTaskList.get(key).getDescription()
-                    + "\n id=" + subTaskList.get(key).getId()
-                    + "\n Статус:" + subTaskList.get(key).getStatus()
-                    + "\n относится к глобальгой задаче id " + subTaskList.get(key).getEpicId());
+                    + "\n Назавание:" + subTasks.get(key).getTitle()
+                    + "\n Описание:" + subTasks.get(key).getDescription()
+                    + "\n id=" + subTasks.get(key).getId()
+                    + "\n Статус:" + subTasks.get(key).getStatus()
+                    + "\n относится к глобальгой задаче id " + subTasks.get(key).getEpicId());
             i++;
         }
     }
@@ -139,22 +132,20 @@ public class Manager {
     void printAllSubTaskEpic(int id) {
         int i = 1;
         System.out.println("Список всех подзадач глобальной задачи:");
-        for (SubTask subTask : epicList.get(id).epicTask) {
-            System.out.println("подзадача №" + i
-                    + "\n Назавание:" + subTask.getTitle()
-                    + "\n Описание:" + subTask.getDescription()
-                    + "\n id=" + subTask.getId()
-                    + "\n Статус:" + subTask.getStatus()
-                    + "\n относится к глобальгой задаче id " + subTask.getEpicId());
-            i++;
+        for (int subTaskId : epics.get(id).subTaskIds) {
+            for (int key : subTasks.keySet()) {
+                if (subTaskId == subTasks.get(key).id)
+                    System.out.println(subTasks.get(key));
+                i++;
+            }
         }
     }
 
     void removeIdTask(int id) {
-        if (taskList.containsKey(id)) {
-            for (int key : taskList.keySet()) {
-                if (id == taskList.get(key).getId()) {
-                    taskList.remove(id);
+        if (tasks.containsKey(id)) {
+            for (int key : tasks.keySet()) {
+                if (id == tasks.get(key).getId()) {
+                    tasks.remove(id);
                     return;
                 }
             }
@@ -165,20 +156,20 @@ public class Manager {
 
     void removeIdEpic(int id) {
         ArrayList<Integer> numberSubtask = new ArrayList<>();
-        if (epicList.containsKey(id)) {
-            for (int keyEpic : epicList.keySet()) {
-                if (id == epicList.get(keyEpic).getId()) {
-                    epicList.remove(id);
+        if (epics.containsKey(id)) {
+            for (int keyEpic : epics.keySet()) {
+                if (id == epics.get(keyEpic).getId()) {
+                    epics.remove(id);
                     break;
                 }
             }
-            for (int keySub : subTaskList.keySet()) {
-                if (id == subTaskList.get(keySub).getEpicId()) {
-                    numberSubtask.add(subTaskList.get(keySub).getId());
+            for (int keySub : subTasks.keySet()) {
+                if (id == subTasks.get(keySub).getEpicId()) {
+                    numberSubtask.add(subTasks.get(keySub).getId());
                 }
             }
             for (int key : numberSubtask) {
-                subTaskList.remove(key);
+                subTasks.remove(key);
             }
         } else {
             System.out.println("Глобалтной задачи с таким id нет");
@@ -186,17 +177,17 @@ public class Manager {
     }
 
     void removeIdSubTask(int id) {
-        if (subTaskList.containsKey(id)) {
-            for (int keySub : subTaskList.keySet()) {
-                if (id == subTaskList.get(keySub).getId()) {
-                    subTaskList.remove(id);
+        if (subTasks.containsKey(id)) {
+            for (int keySub : subTasks.keySet()) {
+                if (id == subTasks.get(keySub).getId()) {
+                    subTasks.remove(id);
                     break;
                 }
             }
-            for (int keyEpic : epicList.keySet()) {
-                for (SubTask subTask : epicList.get(keyEpic).epicTask){
-                    if (id == subTask.getEpicId())   {
-                        epicList.get(keyEpic).epicTask.remove(subTask);
+            for (int keyEpic : epics.keySet()) {
+                for (int subTaskId : epics.get(keyEpic).subTaskIds){
+                    if (id == subTasks.get(subTaskId).getEpicId())   {
+                        epics.get(keyEpic).subTaskIds.remove(subTaskId);
                         break;
                     }
                 }
@@ -208,27 +199,27 @@ public class Manager {
     }
 
     void removeAllTask() {
-        taskList.clear();
+        tasks.clear();
     }
 
     void removeAllEpic() {
-        epicList.clear();
-        subTaskList.clear();
+        epics.clear();
+        subTasks.clear();
     }
 
     void removeAllSabTask() {
-        subTaskList.clear();
-        for(int key : epicList.keySet()) {
-            epicList.get(key).epicTask.clear();
+        subTasks.clear();
+        for(int key : epics.keySet()) {
+            epics.get(key).subTaskIds.clear();
         }
     }
 
     private String assignEpicStatus(int id) {
         ArrayList<String> allStatus = new ArrayList<>();
-        String status = "New";
-        for (Integer key: subTaskList.keySet()) {
-            if (id == subTaskList.get(key).getEpicId()) {
-                allStatus.add(subTaskList.get(key).getStatus());
+        String status = NEW;
+        for (Integer key: subTasks.keySet()) {
+            if (id == subTasks.get(key).getEpicId()) {
+                allStatus.add(subTasks.get(key).getStatus());
             }
         }
         if (allStatus.isEmpty()) {
@@ -236,8 +227,8 @@ public class Manager {
         } else {
             for(String tempStatus: allStatus) {
                 status = tempStatus;
-                if (status.equals("IN_PROGRESS")) {
-                    return status;
+                if (status.equals(IN_PROGRESS)||status.equals(DONE)) {
+                    return IN_PROGRESS;
                 }
             }
         }
