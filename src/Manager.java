@@ -4,9 +4,9 @@ import java.util.Map;
 
 public class Manager {
     private int id = 1;
-    private static final String NEW = "NEW";
-    private static final String IN_PROGRESS = "IN_PROGRESS";
-    private static final String DONE = "DONE";
+    public static final String NEW = "NEW";
+    public static final String IN_PROGRESS = "IN_PROGRESS";
+    public static final String DONE = "DONE";
     private Map<Integer, Task> tasks = new HashMap<>();
     private Map<Integer, Epic> epics = new HashMap<>();
     private Map<Integer, SubTask> subTasks = new HashMap<>();
@@ -89,27 +89,30 @@ public class Manager {
     }
 
     void printAllTask() {
-        int i = 1;
+        int i = 1; //счетчик задач
         System.out.println("Список всех задач:");
         for (int key : tasks.keySet()) {
-            System.out.println("задача №" + i
-                    + "\n Назавание:" + tasks.get(key).getTitle()
-                    + "\n Описание:" + tasks.get(key).getDescription()
-                    + "\n id="+ tasks.get(key).getId()
-                    + "\n Статус:"+ tasks.get(key).getStatus());
+            System.out.println("задача №" + i);
+            System.out.println(tasks.get(key));
             i++;
         }
     }
+
+    //Ваш пример метода
+    /*void printAllTask() {
+        System.out.println("Список всех задач:");
+        for (Map.Entry<Integer, Task> entry: tasks.entrySet()) {
+            System.out.println("задача №" + entry.getKey());
+            System.out.println(entry.getValue());
+        }
+    }*/
 
     void printAllEpic() {
         int i = 1;
         System.out.println("Список всех глобальных задач:");
         for (int key : epics.keySet()) {
-            System.out.println("Глобальная задача №" + i
-                    + "\n Назавание:" + epics.get(key).getStatus()
-                    + "\n Описание:" + epics.get(key).getDescription()
-                    + "\n id=" + epics.get(key).getId()
-                    + "\n Статус:" + epics.get(key).getStatus()
+            System.out.println("Глобальная задача №" + i);
+            System.out.println(epics.get(key)
                     + "\n Содержит в себе " + epics.get(key).subTaskIds.size() +" подзадачу(и)");
             i++;
         }
@@ -119,11 +122,8 @@ public class Manager {
         int i = 1;
         System.out.println("Список всех подзадач:");
         for (int key : subTasks.keySet()) {
-            System.out.println("подзадача №" + i
-                    + "\n Назавание:" + subTasks.get(key).getTitle()
-                    + "\n Описание:" + subTasks.get(key).getDescription()
-                    + "\n id=" + subTasks.get(key).getId()
-                    + "\n Статус:" + subTasks.get(key).getStatus()
+            System.out.println("подзадача №" + i);
+            System.out.println(subTasks.get(key)
                     + "\n относится к глобальгой задаче id " + subTasks.get(key).getEpicId());
             i++;
         }
@@ -135,6 +135,7 @@ public class Manager {
         for (int subTaskId : epics.get(id).subTaskIds) {
             for (int key : subTasks.keySet()) {
                 if (subTaskId == subTasks.get(key).id)
+                    System.out.println("подзадача №" + i);
                     System.out.println(subTasks.get(key));
                 i++;
             }
