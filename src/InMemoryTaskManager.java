@@ -1,22 +1,24 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class Manager {
+public class InMemoryTaskManager implements TaskManager {
     private int id = 1;
-    public static final String NEW = "NEW";
-    public static final String IN_PROGRESS = "IN_PROGRESS";
-    public static final String DONE = "DONE";
     private Map<Integer, Task> tasks = new HashMap<>();
     private Map<Integer, Epic> epics = new HashMap<>();
     private Map<Integer, SubTask> subTasks = new HashMap<>();
 
-    void addTask(Task task) {
+    private List<Task> history = new ArrayList<>();
+
+    @Override
+    public void addTask(Task task) {
         task.setId(id);
         tasks.put(id++, task);
     }
 
-    void addEpic(Epic epic) {
+    @Override
+    public void addEpic(Epic epic) {
         epic.setId(id);
         epic.setStatus(assignEpicStatus(id));
         epics.put(id++, epic);
@@ -28,7 +30,8 @@ public class Manager {
 
     }
 
-    void addSubTask(SubTask subTask) {
+    @Override
+    public void addSubTask(SubTask subTask) {
         if (epics.containsKey(subTask.epicId)) {
             subTask.setId(id++);
             epics.get(subTask.getEpicId()).subTaskIds.add(subTask.id);
@@ -38,16 +41,19 @@ public class Manager {
         }
     }
 
-    void updateTask(Task task) {
+    @Override
+    public void updateTask(Task task) {
         tasks.put(task.getId(), task);
     }
 
-    void updateEpic(Epic epic) {
+    @Override
+    public void updateEpic(Epic epic) {
         epics.put(epic.getId(), epic);
         epic.setStatus(assignEpicStatus(epic.getId()));
     }
 
-    void updateSubTask(SubTask subTask) {
+    @Override
+    public void updateSubTask(SubTask subTask) {
         subTasks.put(subTask.getId(), subTask);
         if (epics.containsKey(subTask.getEpicId())) {
             Epic epic = epics.get(subTask.getEpicId());
@@ -55,7 +61,8 @@ public class Manager {
         }
     }
 
-    void printTargetTask(int id) {
+    @Override
+    public void printTargetTask(int id) {
         for (int key: tasks.keySet()) {
             if (id == tasks.get(key).getId()) {
                 System.out.println("задача под id " + id);
@@ -66,7 +73,8 @@ public class Manager {
         System.out.println("Такой задачи под данным id нет");
     }
 
-    void printTargetEpic(int id) {
+    @Override
+    public void printTargetEpic(int id) {
         for (int key: epics.keySet()) {
             if (id == epics.get(key).getId()) {
                 System.out.println("Глобальная задача под id " + id);
@@ -77,7 +85,8 @@ public class Manager {
         System.out.println("Такой глобальной задачи под данным id нет");
     }
 
-    void printTargetSubTask(int id) {
+    @Override
+    public void printTargetSubTask(int id) {
         for (int key: subTasks.keySet()) {
             if (id == subTasks.get(key).getId()) {
                 System.out.println("Подзадача под id " + id);
@@ -88,7 +97,8 @@ public class Manager {
         System.out.println("Такой подзадачи под данным id нет");
     }
 
-    void printAllTask() {
+    @Override
+    public void printAllTask() {
         int i = 1; //счетчик задач
         System.out.println("Список всех задач:");
         for (int key : tasks.keySet()) {
@@ -98,16 +108,8 @@ public class Manager {
         }
     }
 
-    //Ваш пример метода
-    /*void printAllTask() {
-        System.out.println("Список всех задач:");
-        for (Map.Entry<Integer, Task> entry: tasks.entrySet()) {
-            System.out.println("задача №" + entry.getKey());
-            System.out.println(entry.getValue());
-        }
-    }*/
-
-    void printAllEpic() {
+    @Override
+    public void printAllEpic() {
         int i = 1;
         System.out.println("Список всех глобальных задач:");
         for (int key : epics.keySet()) {
@@ -118,7 +120,8 @@ public class Manager {
         }
     }
 
-    void printAllSubTask() {
+    @Override
+    public void printAllSubTask() {
         int i = 1;
         System.out.println("Список всех подзадач:");
         for (int key : subTasks.keySet()) {
@@ -129,20 +132,22 @@ public class Manager {
         }
     }
 
-    void printAllSubTaskEpic(int id) {
+    @Override
+    public void printAllSubTaskEpic(int id) {
         int i = 1;
         System.out.println("Список всех подзадач глобальной задачи:");
         for (int subTaskId : epics.get(id).subTaskIds) {
             for (int key : subTasks.keySet()) {
                 if (subTaskId == subTasks.get(key).id)
                     System.out.println("подзадача №" + i);
-                    System.out.println(subTasks.get(key));
+                System.out.println(subTasks.get(key));
                 i++;
             }
         }
     }
 
-    void removeIdTask(int id) {
+    @Override
+    public void removeIdTask(int id) {
         if (tasks.containsKey(id)) {
             for (int key : tasks.keySet()) {
                 if (id == tasks.get(key).getId()) {
@@ -155,7 +160,8 @@ public class Manager {
         }
     }
 
-    void removeIdEpic(int id) {
+    @Override
+    public void removeIdEpic(int id) {
         ArrayList<Integer> numberSubtask = new ArrayList<>();
         if (epics.containsKey(id)) {
             for (int keyEpic : epics.keySet()) {
@@ -177,7 +183,8 @@ public class Manager {
         }
     }
 
-    void removeIdSubTask(int id) {
+    @Override
+    public void removeIdSubTask(int id) {
         if (subTasks.containsKey(id)) {
             for (int keySub : subTasks.keySet()) {
                 if (id == subTasks.get(keySub).getId()) {
@@ -199,25 +206,79 @@ public class Manager {
 
     }
 
-    void removeAllTask() {
+    @Override
+    public void removeAllTask() {
         tasks.clear();
     }
 
-    void removeAllEpic() {
+    @Override
+    public void removeAllEpic() {
         epics.clear();
         subTasks.clear();
     }
 
-    void removeAllSabTask() {
+    @Override
+    public void removeAllSabTask() {
         subTasks.clear();
         for(int key : epics.keySet()) {
             epics.get(key).subTaskIds.clear();
         }
     }
 
-    private String assignEpicStatus(int id) {
-        ArrayList<String> allStatus = new ArrayList<>();
-        String status = NEW;
+    @Override
+    public void getHistory() {
+        for (Task task : history) {
+            System.out.print(task.id+" ");
+        }
+
+    }
+
+    public void getTask(int id){
+        int numberCell = 0;
+            for (Integer key : tasks.keySet()) {
+                if (tasks.get(key).id == id) {
+                    if (history.size() == 10) {
+                        history.remove(0);
+                        history.add(tasks.get(key));
+                    } else {
+                        history.add(tasks.get(key));
+                        System.out.println(tasks.get(key));
+                        return;
+                    }
+                } else {
+                    numberCell++;
+                }
+                if (numberCell == tasks.size()) {
+                    System.out.println("Задачи с таким id нет");
+                }
+            }
+    }
+
+    public void getSubTask(int id) {
+        for (Integer key : subTasks.keySet()) {
+            if (tasks.get(key).id == id) {
+                history.add(subTasks.get(key));
+                System.out.println(subTasks.get(key));
+                return;
+            }
+        }
+
+    }
+
+    public void getEpic(int id) {
+        for (Integer key : epics.keySet()) {
+            if (tasks.get(key).id == id) {
+                history.add(epics.get(key));
+                System.out.println(epics.get(key));
+                return;
+            }
+        }
+
+    }
+
+    private StatusTask assignEpicStatus(int id) {
+        ArrayList<StatusTask> allStatus = new ArrayList<>();
+        StatusTask status = StatusTask.NEW;
         for (Integer key: subTasks.keySet()) {
             if (id == subTasks.get(key).getEpicId()) {
                 allStatus.add(subTasks.get(key).getStatus());
@@ -226,10 +287,10 @@ public class Manager {
         if (allStatus.isEmpty()) {
             return status;
         } else {
-            for(String tempStatus: allStatus) {
+            for(StatusTask tempStatus: allStatus) {
                 status = tempStatus;
-                if (status.equals(IN_PROGRESS)||status.equals(DONE)) {
-                    return IN_PROGRESS;
+                if (status.equals(StatusTask.IN_PROGRESS)||status.equals(StatusTask.DONE)) {
+                    return StatusTask.IN_PROGRESS;
                 }
             }
         }
