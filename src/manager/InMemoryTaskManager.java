@@ -4,13 +4,14 @@ import task.Epic;
 import task.StatusTask;
 import task.SubTask;
 import task.Task;
+import extensions.BrowsingHistory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InMemoryTaskManager extends Managers {
+public class InMemoryTaskManager extends Managers implements BrowsingHistory {
     private int id = 1;
     private Map<Integer, Task> tasks = new HashMap<>();
     private Map<Integer, Epic> epics = new HashMap<>();
@@ -239,9 +240,9 @@ public class InMemoryTaskManager extends Managers {
         }
 
     }
-
-    public void getTask(int id){
-        int numberCell = 0;
+    @Override
+    public void getTask(int id) {
+        if (tasks.containsKey(id)) {
             for (Integer key : tasks.keySet()) {
                 if (tasks.get(key).getId() == id) {
                     if (history.size() == 10) {
@@ -253,34 +254,68 @@ public class InMemoryTaskManager extends Managers {
                         return;
                     }
                 } else {
-                    numberCell++;
-                }
-                if (numberCell == tasks.size()) {
                     System.out.println("Задачи с таким id нет");
+                    if (history.size() == 10) {
+                        history.remove(0);
+                        history.add(tasks.get(key));
+                    } else {
+                        history.add(tasks.get(key));
+                    }
                 }
             }
+        }
     }
 
+    @Override
     public void getSubTask(int id) {
-        for (Integer key : subTasks.keySet()) {
-            if (tasks.get(key).getId() == id) {
-                history.add(subTasks.get(key));
-                System.out.println(subTasks.get(key));
-                return;
+        if (subTasks.containsKey(id)) {
+            for (Integer key : subTasks.keySet()) {
+                if (subTasks.get(key).getId() == id) {
+                    if (history.size() == 10) {
+                        history.remove(0);
+                        history.add(subTasks.get(key));
+                    } else {
+                        history.add(subTasks.get(key));
+                        System.out.println(subTasks.get(key));
+                        return;
+                    }
+                } else {
+                    System.out.println("Задачи с таким id нет");
+                    if (history.size() == 10) {
+                        history.remove(0);
+                        history.add(subTasks.get(key));
+                    } else {
+                        history.add(subTasks.get(key));
+                    }
+                }
             }
         }
-
     }
 
+    @Override
     public void getEpic(int id) {
-        for (Integer key : epics.keySet()) {
-            if (tasks.get(key).getId() == id) {
-                history.add(epics.get(key));
-                System.out.println(epics.get(key));
-                return;
+        if (epics.containsKey(id)) {
+            for (Integer key : epics.keySet()) {
+                if (epics.get(key).getId() == id) {
+                    if (history.size() == 10) {
+                        history.remove(0);
+                        history.add(epics.get(key));
+                    } else {
+                        history.add(epics.get(key));
+                        System.out.println(epics.get(key));
+                        return;
+                    }
+                } else {
+                    System.out.println("Задачи с таким id нет");
+                    if (history.size() == 10) {
+                        history.remove(0);
+                        history.add(epics.get(key));
+                    } else {
+                        history.add(epics.get(key));
+                    }
+                }
             }
         }
-
     }
 
     private StatusTask assignEpicStatus(int id) {
