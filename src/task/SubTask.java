@@ -1,3 +1,5 @@
+package task;
+
 public class SubTask extends Task {
     protected int epicId;
 
@@ -6,7 +8,7 @@ public class SubTask extends Task {
         this.epicId = epicId;
 
     }
-    public SubTask(String title, String description, StatusTask status, int id,int epicId) {
+    public SubTask(String title, String description, StatusTask status, int id, int epicId) {
         super(title, description, status, id);
         this.epicId = epicId;
     }

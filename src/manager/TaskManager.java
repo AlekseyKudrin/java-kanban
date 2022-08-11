@@ -1,3 +1,9 @@
+package manager;
+
+import task.Epic;
+import task.SubTask;
+import task.Task;
+
 public interface TaskManager {
     void addTask(Task task);
     void addEpic(Epic epic);
