@@ -1,4 +1,4 @@
-import manager.InMemoryTaskManager;
+import manager.InMemoryHistoryManager;
 import manager.Managers;
 import task.Epic;
 import task.StatusTask;
@@ -8,8 +8,7 @@ import task.Task;
 public class Main {
 
     public static void main(String[] args) {
-        InMemoryTaskManager manager = Managers.getDefault();
-        //InMemoryTaskManager manager = new InMemoryTaskManager();
+        InMemoryHistoryManager manager = Managers.getDefaultHistory();
         //Ввод начальных задач
         Task taskOne = new Task("TaskOne", "testTaskOne", StatusTask.NEW);
         Task taskTwo = new Task("TaskTwo", "testTaskTwo", StatusTask.IN_PROGRESS);
@@ -51,11 +50,13 @@ public class Main {
         manager.getTask(2);
         manager.getTask(2);
         manager.getTask(1);
+        manager.getSubTask(5);
+        manager.getSubTask(5);
+        manager.getSubTask(5);
+        manager.getEpic(7);
         manager.getHistory();
 
-        System.out.println(taskOne);
-
-        /*manager.printAllTask();
+        manager.printAllTask();
         manager.printAllEpic();
         manager.printAllSubTask();
 
@@ -70,6 +71,6 @@ public class Main {
 
         manager.removeAllTask();
         manager.removeAllEpic();
-        manager.removeAllSabTask();*/
+        manager.removeAllSabTask();
     }
 }

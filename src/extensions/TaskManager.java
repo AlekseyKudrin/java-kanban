@@ -1,4 +1,4 @@
-package manager;
+package extensions;
 
 import task.Epic;
 import task.SubTask;
@@ -24,5 +24,4 @@ public interface TaskManager {
     void removeAllTask();
     void removeAllEpic();
     void removeAllSabTask();
-    void getHistory();
 }

@@ -1,23 +1,20 @@
 package manager;
 
+import extensions.TaskManager;
 import task.Epic;
 import task.StatusTask;
 import task.SubTask;
 import task.Task;
-import extensions.BrowsingHistory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class InMemoryTaskManager extends Managers implements BrowsingHistory {
+public class InMemoryTaskManager implements TaskManager {
     private int id = 1;
-    private Map<Integer, Task> tasks = new HashMap<>();
-    private Map<Integer, Epic> epics = new HashMap<>();
-    private Map<Integer, SubTask> subTasks = new HashMap<>();
-
-    private List<Task> history = new ArrayList<>();
+    protected Map<Integer, Task> tasks = new HashMap<>();
+    protected Map<Integer, Epic> epics = new HashMap<>();
+    protected Map<Integer, SubTask> subTasks = new HashMap<>();
 
     @Override
     public void addTask(Task task) {
@@ -230,91 +227,6 @@ public class InMemoryTaskManager extends Managers implements BrowsingHistory {
         subTasks.clear();
         for(int key : epics.keySet()) {
             epics.get(key).subTaskIds.clear();
-        }
-    }
-
-    @Override
-    public void getHistory() {
-        for (Task task : history) {
-            System.out.print(task.getId()+" ");
-        }
-
-    }
-    @Override
-    public void getTask(int id) {
-        if (tasks.containsKey(id)) {
-            for (Integer key : tasks.keySet()) {
-                if (tasks.get(key).getId() == id) {
-                    if (history.size() == 10) {
-                        history.remove(0);
-                        history.add(tasks.get(key));
-                    } else {
-                        history.add(tasks.get(key));
-                        System.out.println(tasks.get(key));
-                        return;
-                    }
-                } else {
-                    System.out.println("Задачи с таким id нет");
-                    if (history.size() == 10) {
-                        history.remove(0);
-                        history.add(tasks.get(key));
-                    } else {
-                        history.add(tasks.get(key));
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
-    public void getSubTask(int id) {
-        if (subTasks.containsKey(id)) {
-            for (Integer key : subTasks.keySet()) {
-                if (subTasks.get(key).getId() == id) {
-                    if (history.size() == 10) {
-                        history.remove(0);
-                        history.add(subTasks.get(key));
-                    } else {
-                        history.add(subTasks.get(key));
-                        System.out.println(subTasks.get(key));
-                        return;
-                    }
-                } else {
-                    System.out.println("Задачи с таким id нет");
-                    if (history.size() == 10) {
-                        history.remove(0);
-                        history.add(subTasks.get(key));
-                    } else {
-                        history.add(subTasks.get(key));
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
-    public void getEpic(int id) {
-        if (epics.containsKey(id)) {
-            for (Integer key : epics.keySet()) {
-                if (epics.get(key).getId() == id) {
-                    if (history.size() == 10) {
-                        history.remove(0);
-                        history.add(epics.get(key));
-                    } else {
-                        history.add(epics.get(key));
-                        System.out.println(epics.get(key));
-                        return;
-                    }
-                } else {
-                    System.out.println("Задачи с таким id нет");
-                    if (history.size() == 10) {
-                        history.remove(0);
-                        history.add(epics.get(key));
-                    } else {
-                        history.add(epics.get(key));
-                    }
-                }
-            }
         }
     }
 
