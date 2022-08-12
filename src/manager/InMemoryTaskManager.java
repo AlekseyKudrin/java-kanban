@@ -27,7 +27,7 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setId(id);
         epic.setStatus(assignEpicStatus(id));
         epics.put(id++, epic);
-        for (Integer key: subTasks.keySet()) {
+        for (Integer key : subTasks.keySet()) {
             if (subTasks.get(key).getEpicId() == epic.getId()) {
                 epic.subTaskIds.add(subTasks.get(key).getId());
             }
@@ -68,7 +68,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void printTargetTask(int id) {
-        for (int key: tasks.keySet()) {
+        for (int key : tasks.keySet()) {
             if (id == tasks.get(key).getId()) {
                 System.out.println("задача под id " + id);
                 System.out.println(tasks.get(key));
@@ -80,7 +80,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void printTargetEpic(int id) {
-        for (int key: epics.keySet()) {
+        for (int key : epics.keySet()) {
             if (id == epics.get(key).getId()) {
                 System.out.println("Глобальная задача под id " + id);
                 System.out.println(epics.get(key));
@@ -92,10 +92,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void printTargetSubTask(int id) {
-        for (int key: subTasks.keySet()) {
+        for (int key : subTasks.keySet()) {
             if (id == subTasks.get(key).getId()) {
                 System.out.println("Подзадача под id " + id);
-                System.out.println(subTasks.get(key)        );
+                System.out.println(subTasks.get(key));
                 return;
             }
         }
@@ -119,8 +119,7 @@ public class InMemoryTaskManager implements TaskManager {
         System.out.println("Список всех глобальных задач:");
         for (int key : epics.keySet()) {
             System.out.println("Глобальная задача №" + i);
-            System.out.println(epics.get(key)
-                    + "\n Содержит в себе " + epics.get(key).subTaskIds.size() +" подзадачу(и)");
+            System.out.println(epics.get(key) + "\n Содержит в себе " + epics.get(key).subTaskIds.size() + " подзадачу(и)");
             i++;
         }
     }
@@ -131,8 +130,7 @@ public class InMemoryTaskManager implements TaskManager {
         System.out.println("Список всех подзадач:");
         for (int key : subTasks.keySet()) {
             System.out.println("подзадача №" + i);
-            System.out.println(subTasks.get(key)
-                    + "\n относится к глобальгой задаче id " + subTasks.get(key).getEpicId());
+            System.out.println(subTasks.get(key) + "\n относится к глобальгой задаче id " + subTasks.get(key).getEpicId());
             i++;
         }
     }
@@ -143,8 +141,7 @@ public class InMemoryTaskManager implements TaskManager {
         System.out.println("Список всех подзадач глобальной задачи:");
         for (int subTaskId : epics.get(id).subTaskIds) {
             for (int key : subTasks.keySet()) {
-                if (subTaskId == subTasks.get(key).getId())
-                    System.out.println("подзадача №" + i);
+                if (subTaskId == subTasks.get(key).getId()) System.out.println("подзадача №" + i);
                 System.out.println(subTasks.get(key));
                 i++;
             }
@@ -198,8 +195,8 @@ public class InMemoryTaskManager implements TaskManager {
                 }
             }
             for (int keyEpic : epics.keySet()) {
-                for (int subTaskId : epics.get(keyEpic).subTaskIds){
-                    if (id == subTasks.get(subTaskId).getEpicId())   {
+                for (int subTaskId : epics.get(keyEpic).subTaskIds) {
+                    if (id == subTasks.get(subTaskId).getEpicId()) {
                         epics.get(keyEpic).subTaskIds.remove(subTaskId);
                         break;
                     }
@@ -225,7 +222,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeAllSabTask() {
         subTasks.clear();
-        for(int key : epics.keySet()) {
+        for (int key : epics.keySet()) {
             epics.get(key).subTaskIds.clear();
         }
     }
@@ -233,7 +230,7 @@ public class InMemoryTaskManager implements TaskManager {
     private StatusTask assignEpicStatus(int id) {
         ArrayList<StatusTask> allStatus = new ArrayList<>();
         StatusTask status = StatusTask.NEW;
-        for (Integer key: subTasks.keySet()) {
+        for (Integer key : subTasks.keySet()) {
             if (id == subTasks.get(key).getEpicId()) {
                 allStatus.add(subTasks.get(key).getStatus());
             }
@@ -241,9 +238,9 @@ public class InMemoryTaskManager implements TaskManager {
         if (allStatus.isEmpty()) {
             return status;
         } else {
-            for(StatusTask tempStatus: allStatus) {
+            for (StatusTask tempStatus : allStatus) {
                 status = tempStatus;
-                if (status.equals(StatusTask.IN_PROGRESS)||status.equals(StatusTask.DONE)) {
+                if (status.equals(StatusTask.IN_PROGRESS) || status.equals(StatusTask.DONE)) {
                     return StatusTask.IN_PROGRESS;
                 }
             }

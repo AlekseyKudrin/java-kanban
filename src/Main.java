@@ -12,9 +12,9 @@ public class Main {
         //Ввод начальных задач
         Task taskOne = new Task("TaskOne", "testTaskOne", StatusTask.NEW);
         Task taskTwo = new Task("TaskTwo", "testTaskTwo", StatusTask.IN_PROGRESS);
-        SubTask subTaskOne = new SubTask("one", "testSubTaskOne", StatusTask.DONE,6);
-        SubTask subTaskTwo = new SubTask("two", "testSubTuskTwo", StatusTask.NEW,6);
-        SubTask subTaskThree = new SubTask("three", "testSubTuskTwo", StatusTask.NEW,7);
+        SubTask subTaskOne = new SubTask("one", "testSubTaskOne", StatusTask.DONE, 6);
+        SubTask subTaskTwo = new SubTask("two", "testSubTuskTwo", StatusTask.NEW, 6);
+        SubTask subTaskThree = new SubTask("three", "testSubTuskTwo", StatusTask.NEW, 7);
         Epic epicOne = new Epic("EpicOne", "test1");
         Epic epicTwo = new Epic("EpicTwo", "test2");
 
@@ -27,7 +27,7 @@ public class Main {
         manager.addEpic(epicTwo);
 
         //Обновление подзадачи
-        SubTask upSubThree = new SubTask("two", "testSubTuskTwo", StatusTask.DONE,5,6);
+        SubTask upSubThree = new SubTask("two", "testSubTuskTwo", StatusTask.DONE, 5, 6);
         manager.updateSubTask(upSubThree);
 
         //Обновление глобальной задачи

@@ -1,7 +1,7 @@
 package task;
 
 public class Task {
-    protected String  title;
+    protected String title;
     protected String description;
     protected int id;
     protected StatusTask status;
@@ -16,6 +16,7 @@ public class Task {
         this.description = description;
         this.status = status;
     }
+
     public Task(String title, String description, StatusTask status, int id) {
         this.title = title;
         this.description = description;

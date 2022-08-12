@@ -17,6 +17,6 @@ public class Epic extends Task {
                 + "\n Описание:" + getDescription()
                 + "\n id=" + getId()
                 + "\n Статус:" + getStatus()
-                + "\n Содержит в себе " + subTaskIds.size() +" подзадачу(и)";
+                + "\n Содержит в себе " + subTaskIds.size() + " подзадачу(и)";
     }
 }
