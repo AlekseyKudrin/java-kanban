@@ -1,4 +1,4 @@
-import manager.InMemoryHistoryManager;
+import extensions.TaskManager;
 import manager.Managers;
 import task.Epic;
 import task.StatusTask;
@@ -8,7 +8,8 @@ import task.Task;
 public class Main {
 
     public static void main(String[] args) {
-        InMemoryHistoryManager manager = Managers.getDefaultHistory();
+        TaskManager manager = Managers.getDefault();
+
         //Ввод начальных задач
         Task taskOne = new Task("TaskOne", "testTaskOne", StatusTask.NEW);
         Task taskTwo = new Task("TaskTwo", "testTaskTwo", StatusTask.IN_PROGRESS);

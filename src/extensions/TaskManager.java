@@ -4,7 +4,18 @@ import task.Epic;
 import task.SubTask;
 import task.Task;
 
+import java.util.List;
+
 public interface TaskManager {
+
+    void getTask(int id);
+
+    void getSubTask(int id);
+
+    void getEpic(int id);
+
+    List<Task> getHistory();
+
     void addTask(Task task);
 
     void addEpic(Epic epic);
