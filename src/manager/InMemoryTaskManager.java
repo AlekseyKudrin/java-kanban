@@ -241,7 +241,6 @@ public class InMemoryTaskManager implements TaskManager {
                     return;
                 } else {
                     System.out.println("Задачи с таким id нет");
-                    history.add(tasks.get(id));
                 }
             }
         }
@@ -252,14 +251,11 @@ public class InMemoryTaskManager implements TaskManager {
         if (subTasks.containsKey(id)) {
             for (Integer key : subTasks.keySet()) {
                 if (subTasks.get(key).getId() == id) {
-                    if (subTasks.get(key).getId() == id) {
-                        history.add(subTasks.get(id));
-                        System.out.println(subTasks.get(id));
-                        return;
-                    } else {
-                        System.out.println("Задачи с таким id нет");
-                        history.add(subTasks.get(id));
-                    }
+                    history.add(subTasks.get(id));
+                    System.out.println(subTasks.get(id));
+                    return;
+                } else {
+                    System.out.println("Задачи с таким id нет");
                 }
             }
         }
@@ -270,14 +266,11 @@ public class InMemoryTaskManager implements TaskManager {
         if (epics.containsKey(id)) {
             for (Integer key : epics.keySet()) {
                 if (epics.get(key).getId() == id) {
-                    if (epics.get(key).getId() == id) {
-                        history.add(epics.get(id));
-                        System.out.println(epics.get(id));
-                        return;
-                    } else {
-                        System.out.println("Задачи с таким id нет");
-                        history.add(epics.get(id));
-                    }
+                    history.add(epics.get(id));
+                    System.out.println(epics.get(id));
+                    return;
+                } else {
+                    System.out.println("Задачи с таким id нет");
                 }
             }
         }
