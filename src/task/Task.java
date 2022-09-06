@@ -1,5 +1,7 @@
 package task;
 
+import util.StatusTask;
+
 public class Task {
     protected String title;
     protected String description;

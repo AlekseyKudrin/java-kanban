@@ -10,11 +10,11 @@ public interface TaskManager {
 
     void getTask(int id);
 
-    void getSubTask(int id);
+    //void getSubTask(int id);
 
-    void getEpic(int id);
+    //void getEpic(int id);
 
-    List<Task> getHistory();
+    void getHistory();
 
     void addTask(Task task);
 

@@ -1,7 +1,7 @@
 import extensions.TaskManager;
 import manager.Managers;
 import task.Epic;
-import task.StatusTask;
+import util.StatusTask;
 import task.SubTask;
 import task.Task;
 
@@ -15,7 +15,7 @@ public class Main {
         Task taskTwo = new Task("TaskTwo", "testTaskTwo", StatusTask.IN_PROGRESS);
         SubTask subTaskOne = new SubTask("one", "testSubTaskOne", StatusTask.DONE, 6);
         SubTask subTaskTwo = new SubTask("two", "testSubTuskTwo", StatusTask.NEW, 6);
-        SubTask subTaskThree = new SubTask("three", "testSubTuskTwo", StatusTask.NEW, 7);
+        SubTask subTaskThree = new SubTask("three", "testSubTuskTwo", StatusTask.NEW, 6);
         Epic epicOne = new Epic("EpicOne", "test1");
         Epic epicTwo = new Epic("EpicTwo", "test2");
 
@@ -27,51 +27,20 @@ public class Main {
         manager.addEpic(epicOne);
         manager.addEpic(epicTwo);
 
-        //Обновление подзадачи
-        SubTask upSubThree = new SubTask("two", "testSubTuskTwo", StatusTask.DONE, 5, 6);
-        manager.updateSubTask(upSubThree);
-
-        //Обновление глобальной задачи
-        Epic upEpic = new Epic("EpicThree", "test1");
-        manager.updateEpic(upEpic);
-
-        //Обновление задачи
-        Task upTask = new Task("TaskOne", "testTaskOne", StatusTask.IN_PROGRESS, 1);
-        manager.updateTask(upTask);
-
 
         manager.getTask(2);
-        manager.getTask(2);
-        manager.getTask(2);
-        manager.getTask(2);
-        manager.getTask(2);
-        manager.getTask(2);
-        manager.getTask(2);
-        manager.getTask(2);
-        manager.getTask(2);
-        manager.getTask(2);
-        manager.getTask(1);
-        manager.getSubTask(5);
-        manager.getSubTask(5);
-        manager.getSubTask(5);
-        manager.getEpic(7);
+        manager.getTask(3);
+        manager.getTask(4);
+        manager.getTask(5);
+        manager.getTask(4);
+        manager.getTask(3);
+        manager.getTask(6);
+
+        manager.removeIdTask(2);
+        manager.removeIdEpic(6);
+
         manager.getHistory();
 
-        manager.printAllTask();
-        manager.printAllEpic();
-        manager.printAllSubTask();
 
-        manager.printTargetTask(2);
-        manager.printTargetEpic(6);
-        manager.printTargetSubTask(3);
-        manager.printAllSubTaskEpic(7);
-
-        manager.removeIdTask(1);
-        manager.removeIdEpic(6);
-        manager.removeIdSubTask(3);
-
-        manager.removeAllTask();
-        manager.removeAllEpic();
-        manager.removeAllSabTask();
     }
 }

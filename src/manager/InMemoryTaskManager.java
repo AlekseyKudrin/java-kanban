@@ -3,7 +3,7 @@ package manager;
 import extensions.HistoryManager;
 import extensions.TaskManager;
 import task.Epic;
-import task.StatusTask;
+import util.StatusTask;
 import task.SubTask;
 import task.Task;
 
@@ -158,6 +158,7 @@ public class InMemoryTaskManager implements TaskManager {
             for (int key : tasks.keySet()) {
                 if (id == tasks.get(key).getId()) {
                     tasks.remove(id);
+                    history.remove(id);
                     return;
                 }
             }
@@ -173,6 +174,7 @@ public class InMemoryTaskManager implements TaskManager {
             for (int keyEpic : epics.keySet()) {
                 if (id == epics.get(keyEpic).getId()) {
                     epics.remove(id);
+                    history.remove(id);
                     break;
                 }
             }
@@ -183,6 +185,8 @@ public class InMemoryTaskManager implements TaskManager {
             }
             for (int key : numberSubtask) {
                 subTasks.remove(key);
+                history.remove(key);
+
             }
         } else {
             System.out.println("Глобалтной задачи с таким id нет");
@@ -234,10 +238,23 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void getTask(int id) {
         if (tasks.containsKey(id)) {
-            for (Integer key : tasks.keySet()) {
-                if (tasks.get(key).getId() == id) {
-                    history.add(tasks.get(id));
-                    System.out.println(tasks.get(id));
+            for (Map.Entry<Integer, Task> entry : tasks.entrySet()) {
+                if (entry.getKey() == id) {
+                    history.add(entry.getValue());
+                    return;
+                }
+            }
+        } else if (subTasks.containsKey(id)) {
+            for (Map.Entry<Integer, SubTask> entry : subTasks.entrySet()) {
+                if (entry.getKey() == id) {
+                    history.add(entry.getValue());
+                    return;
+                }
+            }
+        } else if (epics.containsKey(id)) {
+            for (Map.Entry<Integer, Epic> entry : epics.entrySet()) {
+                if (entry.getKey() == id) {
+                    history.add(entry.getValue());
                     return;
                 } else {
                     System.out.println("Задачи с таким id нет");
@@ -246,39 +263,8 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    @Override
-    public void getSubTask(int id) {
-        if (subTasks.containsKey(id)) {
-            for (Integer key : subTasks.keySet()) {
-                if (subTasks.get(key).getId() == id) {
-                    history.add(subTasks.get(id));
-                    System.out.println(subTasks.get(id));
-                    return;
-                } else {
-                    System.out.println("Задачи с таким id нет");
-                }
-            }
-        }
-    }
-
-    @Override
-    public void getEpic(int id) {
-        if (epics.containsKey(id)) {
-            for (Integer key : epics.keySet()) {
-                if (epics.get(key).getId() == id) {
-                    history.add(epics.get(id));
-                    System.out.println(epics.get(id));
-                    return;
-                } else {
-                    System.out.println("Задачи с таким id нет");
-                }
-            }
-        }
-    }
-
-    @Override
-    public List<Task> getHistory() {
-        return history.getHistory();
+    public void getHistory() {
+        System.out.println(history.getHistory());
     }
 
     private StatusTask assignEpicStatus(int id) {

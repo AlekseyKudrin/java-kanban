@@ -1,4 +1,4 @@
-package task;
+package util;
 
 public enum StatusTask {
     NEW,
