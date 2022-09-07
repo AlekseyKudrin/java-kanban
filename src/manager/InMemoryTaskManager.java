@@ -3,22 +3,20 @@ package manager;
 import extensions.HistoryManager;
 import extensions.TaskManager;
 import task.Epic;
-import util.StatusTask;
 import task.SubTask;
 import task.Task;
+import util.StatusTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
-    private int id = 1;
     protected Map<Integer, Task> tasks = new HashMap<>();
     protected Map<Integer, Epic> epics = new HashMap<>();
     protected Map<Integer, SubTask> subTasks = new HashMap<>();
-
     HistoryManager history = Managers.getDefaultHistory();
+    private int id = 1;
 
     @Override
     public void addTask(Task task) {

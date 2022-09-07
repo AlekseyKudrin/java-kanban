@@ -37,7 +37,7 @@ public class Main {
         manager.getTask(6);
 
         manager.removeIdTask(2);
-        manager.removeIdEpic(6);
+     //   manager.removeIdEpic(6);
 
         manager.getHistory();
 

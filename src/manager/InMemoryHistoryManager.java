@@ -12,8 +12,7 @@ import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    Node head;
-    Node tail;
+    private Node head;
 
     Map<Integer, Node> history = new HashMap<>();
 
@@ -21,29 +20,27 @@ public class InMemoryHistoryManager implements HistoryManager {
     public List<Integer> getHistory() {
         List<Integer> list = new ArrayList<>();
         for (Node value : history.values()) {
-            if (value.prev == null) {
+            if (value.getPrev() == null) {
                 while (!(list.size() == history.size())) {
-                    list.add(value.task.getId());
-                    value = value.next;
+                    list.add(value.getTask().getId());
+                    value = value.getNext();
                 }
             }
         }
         return list;
     }
-
-    @Override
+        @Override
     public void add(Task task) {
         Node oldHead = head;
-        Node oldTail = tail;
-        Node node = new Node(oldHead, task, oldTail);
+        Node node = new Node(oldHead, task, null);
         if (!history.containsKey(task.getId())) {
             if (oldHead != null) {
-                oldHead.next = node;
+                oldHead.setNext(node);
             }
         } else {
             linkLast(history.get(task.getId()));
             history.remove(task.getId());
-            oldHead.next = node;
+            oldHead.setNext(node);
         }
         head = node;
         history.put(task.getId(), node);
@@ -51,20 +48,22 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void remove(int id) {
-        linkLast(history.get(id));
-        history.remove(id);
+        if (history.containsKey(id)) {
+            linkLast(history.get(id));
+            history.remove(id);
+        }
     }
 
 
     public void linkLast(Node node) {
-        if (!(node.next == null & node.prev == null)) {
-            if (node.prev != null) {
-                node.prev.next = node.next;
+        if (!(node.getNext() == null & node.getPrev() == null)) {
+            if (node.getPrev() == null) {
+                node.getNext().setPrev(null);
             } else {
-                node.next.prev = null;
+                node.getPrev().setNext(node.getNext());
             }
-            if (node.next != null) {
-                node.next.prev = node.prev;
+            if (node.getNext() != null) {
+                node.getNext().setPrev(node.getPrev());
             }
         }
     }
