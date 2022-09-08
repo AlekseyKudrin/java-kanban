@@ -15,7 +15,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected Map<Integer, Task> tasks = new HashMap<>();
     protected Map<Integer, Epic> epics = new HashMap<>();
     protected Map<Integer, SubTask> subTasks = new HashMap<>();
-    HistoryManager history = Managers.getDefaultHistory();
+    private HistoryManager history = Managers.getDefaultHistory();
     private int id = 1;
 
     @Override
@@ -167,24 +167,23 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeIdEpic(int id) {
-        ArrayList<Integer> numberSubtask = new ArrayList<>();
+        ArrayList<Integer> numberSubTask = new ArrayList<>();
         if (epics.containsKey(id)) {
             for (int keyEpic : epics.keySet()) {
                 if (id == epics.get(keyEpic).getId()) {
-                    epics.remove(id);
-                    history.remove(id);
+                    epics.remove(keyEpic);
+                    history.remove(keyEpic);
                     break;
                 }
             }
             for (int keySub : subTasks.keySet()) {
                 if (id == subTasks.get(keySub).getEpicId()) {
-                    numberSubtask.add(subTasks.get(keySub).getId());
+                    numberSubTask.add(subTasks.get(keySub).getId());
+                    history.remove(keySub);
                 }
             }
-            for (int key : numberSubtask) {
+            for (int key : numberSubTask) {
                 subTasks.remove(key);
-                history.remove(key);
-
             }
         } else {
             System.out.println("Глобалтной задачи с таким id нет");

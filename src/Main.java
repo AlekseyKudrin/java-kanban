@@ -35,9 +35,10 @@ public class Main {
         manager.getTask(4);
         manager.getTask(3);
         manager.getTask(6);
+        manager.getTask(2);
 
         manager.removeIdTask(2);
-     //   manager.removeIdEpic(6);
+        manager.removeIdEpic(6);
 
         manager.getHistory();
 

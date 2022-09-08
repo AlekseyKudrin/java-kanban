@@ -13,36 +13,39 @@ import java.util.Map;
 public class InMemoryHistoryManager implements HistoryManager {
 
     private Node head;
+    private Node tail;
 
-    Map<Integer, Node> history = new HashMap<>();
+    private Map<Integer, Node> history = new HashMap<>();
 
     @Override
     public List<Integer> getHistory() {
+        Node headTemp = head;
         List<Integer> list = new ArrayList<>();
-        for (Node value : history.values()) {
-            if (value.getPrev() == null) {
-                while (!(list.size() == history.size())) {
-                    list.add(value.getTask().getId());
-                    value = value.getNext();
-                }
+        if (head != null) {
+            while (headTemp.getNext() != null) {
+                list.add(headTemp.getTask().getId());
+                headTemp = headTemp.getNext();
             }
+            list.add(headTemp.getTask().getId());
         }
         return list;
     }
-        @Override
+
+    @Override
     public void add(Task task) {
-        Node oldHead = head;
-        Node node = new Node(oldHead, task, null);
-        if (!history.containsKey(task.getId())) {
-            if (oldHead != null) {
-                oldHead.setNext(node);
-            }
-        } else {
+        Node node = new Node(tail, task, null);
+        if (history.containsKey(task.getId())) {
             linkLast(history.get(task.getId()));
             history.remove(task.getId());
-            oldHead.setNext(node);
+            tail.setNext(node);
+        } else {
+            if (head == null) {
+                head = node;
+            } else {
+                tail.setNext(node);
+            }
         }
-        head = node;
+        tail = node;
         history.put(task.getId(), node);
     }
 
@@ -56,15 +59,26 @@ public class InMemoryHistoryManager implements HistoryManager {
 
 
     public void linkLast(Node node) {
-        if (!(node.getNext() == null & node.getPrev() == null)) {
-            if (node.getPrev() == null) {
-                node.getNext().setPrev(null);
-            } else {
-                node.getPrev().setNext(node.getNext());
-            }
-            if (node.getNext() != null) {
-                node.getNext().setPrev(node.getPrev());
-            }
+        if (node.getPrev() == null & node.getNext() == null) {
+            head = null;
+            return;
+        }
+        if (node.getPrev() == null) {
+            head = node.getNext();
+            node.getNext().setPrev(null);
+            tail.setNext(node);
+        } else {
+            node.getPrev().setNext(node.getNext());
+        }
+        if (node.getNext() == null) {
+            node.getPrev().setNext(null);
+            tail = node;
+        } else {
+            node.getNext().setPrev(node.getPrev());
+        }
+        if (head == tail) {
+            head.setNext(null);
+            tail = null;
         }
     }
 }
