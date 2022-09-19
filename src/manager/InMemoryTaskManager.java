@@ -3,20 +3,22 @@ package manager;
 import extensions.HistoryManager;
 import extensions.TaskManager;
 import task.Epic;
+import util.StatusTask;
 import task.SubTask;
 import task.Task;
-import util.StatusTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
+    protected int id = 1;
     protected Map<Integer, Task> tasks = new HashMap<>();
     protected Map<Integer, Epic> epics = new HashMap<>();
     protected Map<Integer, SubTask> subTasks = new HashMap<>();
-    private HistoryManager history = Managers.getDefaultHistory();
-    private int id = 1;
+
+    HistoryManager history = Managers.getDefaultHistory();
 
     @Override
     public void addTask(Task task) {
@@ -34,14 +36,14 @@ public class InMemoryTaskManager implements TaskManager {
                 epic.subTaskIds.add(subTasks.get(key).getId());
             }
         }
-
     }
 
     @Override
     public void addSubTask(SubTask subTask) {
         if (epics.containsKey(subTask.getEpicId())) {
-            subTask.setId(id++);
+            subTask.setId(id);
             epics.get(subTask.getEpicId()).subTaskIds.add(subTask.getId());
+            subTasks.put(id++, subTask);
         } else {
             subTask.setId(id);
             subTasks.put(id++, subTask);
@@ -167,23 +169,24 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeIdEpic(int id) {
-        ArrayList<Integer> numberSubTask = new ArrayList<>();
+        ArrayList<Integer> numberSubtask = new ArrayList<>();
         if (epics.containsKey(id)) {
             for (int keyEpic : epics.keySet()) {
                 if (id == epics.get(keyEpic).getId()) {
-                    epics.remove(keyEpic);
-                    history.remove(keyEpic);
+                    epics.remove(id);
+                    history.remove(id);
                     break;
                 }
             }
             for (int keySub : subTasks.keySet()) {
                 if (id == subTasks.get(keySub).getEpicId()) {
-                    numberSubTask.add(subTasks.get(keySub).getId());
-                    history.remove(keySub);
+                    numberSubtask.add(subTasks.get(keySub).getId());
                 }
             }
-            for (int key : numberSubTask) {
+            for (int key : numberSubtask) {
                 subTasks.remove(key);
+                history.remove(key);
+
             }
         } else {
             System.out.println("Глобалтной задачи с таким id нет");
@@ -253,10 +256,10 @@ public class InMemoryTaskManager implements TaskManager {
                 if (entry.getKey() == id) {
                     history.add(entry.getValue());
                     return;
-                } else {
-                    System.out.println("Задачи с таким id нет");
                 }
             }
+        } else {
+            System.out.println("Задачи с таким id нет");
         }
     }
 

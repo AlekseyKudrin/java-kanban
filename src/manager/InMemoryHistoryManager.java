@@ -12,73 +12,60 @@ import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private Node head;
-    private Node tail;
+    Node head;
+    Node tail;
 
-    private Map<Integer, Node> history = new HashMap<>();
+    Map<Integer, Node> history = new HashMap<>();
 
     @Override
     public List<Integer> getHistory() {
-        Node headTemp = head;
         List<Integer> list = new ArrayList<>();
-        if (head != null) {
-            while (headTemp.getNext() != null) {
-                list.add(headTemp.getTask().getId());
-                headTemp = headTemp.getNext();
+        for (Node value : history.values()) {
+            if (value.prev == null) {
+                while (!(list.size() == history.size())) {
+                    list.add(value.task.getId());
+                    value = value.next;
+                }
             }
-            list.add(headTemp.getTask().getId());
         }
         return list;
     }
 
     @Override
     public void add(Task task) {
-        Node node = new Node(tail, task, null);
-        if (history.containsKey(task.getId())) {
+        Node oldHead = head;
+        Node oldTail = tail;
+        Node node = new Node(oldHead, task, oldTail);
+        if (!history.containsKey(task.getId())) {
+            if (oldHead != null) {
+                oldHead.next = node;
+            }
+        } else {
             linkLast(history.get(task.getId()));
             history.remove(task.getId());
-            tail.setNext(node);
-        } else {
-            if (head == null) {
-                head = node;
-            } else {
-                tail.setNext(node);
-            }
+            oldHead.next = node;
         }
-        tail = node;
+        head = node;
         history.put(task.getId(), node);
     }
 
     @Override
     public void remove(int id) {
-        if (history.containsKey(id)) {
-            linkLast(history.get(id));
-            history.remove(id);
-        }
+        linkLast(history.get(id));
+        history.remove(id);
     }
 
 
     public void linkLast(Node node) {
-        if (node.getPrev() == null & node.getNext() == null) {
-            head = null;
-            return;
-        }
-        if (node.getPrev() == null) {
-            head = node.getNext();
-            node.getNext().setPrev(null);
-            tail.setNext(node);
-        } else {
-            node.getPrev().setNext(node.getNext());
-        }
-        if (node.getNext() == null) {
-            node.getPrev().setNext(null);
-            tail = node;
-        } else {
-            node.getNext().setPrev(node.getPrev());
-        }
-        if (head == tail) {
-            head.setNext(null);
-            tail = null;
+        if (!(node.next == null & node.prev == null)) {
+            if (node.prev != null) {
+                node.prev.next = node.next;
+            } else {
+                node.next.prev = null;
+            }
+            if (node.next != null) {
+                node.next.prev = node.prev;
+            }
         }
     }
-}
+    }

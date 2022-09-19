@@ -13,10 +13,6 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return "Назавание:" + getTitle()
-                + "\n Описание:" + getDescription()
-                + "\n id=" + getId()
-                + "\n Статус:" + getStatus()
-                + "\n Содержит в себе " + subTaskIds.size() + " подзадачу(и)";
+        return id + "," +"EPIC"+  "," + title +  "," + status + "," + description+ ",";
     }
 }

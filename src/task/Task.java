@@ -1,6 +1,7 @@
 package task;
 
 import util.StatusTask;
+import util.TypeTask;
 
 public class Task {
     protected String title;
@@ -60,9 +61,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Назавание:" + getTitle()
-                + "\n Описание:" + getDescription()
-                + "\n id=" + getId()
-                + "\n Статус:" + getStatus();
+        return id + "," +"TASK"+  "," + title +  "," + status + "," + description+ ",";
     }
 }

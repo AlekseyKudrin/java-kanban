@@ -26,10 +26,6 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        return "Назавание:" + getTitle()
-                + "\n Описание:" + getDescription()
-                + "\n id=" + getId()
-                + "\n Статус:" + getStatus()
-                + "\n относится к глобальгой задаче id " + getEpicId();
+        return id + "," +"SUBTASK"+  "," + title +  "," + status + "," + description + ","+ epicId;
     }
 }

@@ -1,4 +1,5 @@
 import extensions.TaskManager;
+import manager.FileBackedTasksManager;
 import manager.Managers;
 import task.Epic;
 import util.StatusTask;
@@ -9,6 +10,7 @@ public class Main {
 
     public static void main(String[] args) {
         TaskManager manager = Managers.getDefault();
+
 
         //Ввод начальных задач
         Task taskOne = new Task("TaskOne", "testTaskOne", StatusTask.NEW);
@@ -35,7 +37,6 @@ public class Main {
         manager.getTask(4);
         manager.getTask(3);
         manager.getTask(6);
-        manager.getTask(2);
 
         manager.removeIdTask(2);
         manager.removeIdEpic(6);
