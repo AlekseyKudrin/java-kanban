@@ -7,7 +7,6 @@ import task.SubTask;
 import task.Task;
 import util.ErrorException;
 import util.StatusTask;
-import util.TypeTask;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -96,38 +95,33 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     getTask(Integer.parseInt(str));
                 }
             } else {
-                try {
                     int id = Integer.parseInt(parts[0]);
-                    TypeTask type = TypeTask.valueOf(parts[1]);
                     String name = parts[2];
-                    StatusTask status = StatusTask.valueOf(parts[3]);
                     String description = parts[4];
-                    if (TypeTask.TASK.equals(type)) {
+                    if ("TASK".equals(parts[1])) {
+                        StatusTask status = StatusTask.valueOf(parts[3]);
                         Task task = new Task(name, description, status);
                         task.setId(id);
                         this.id = id;
                         super.addTask(task);
                     }
-                    if (TypeTask.EPIC.equals(type)) {
+                    if ("EPIC".equals(parts[1])) {
+                        StatusTask status = StatusTask.valueOf(parts[3]);
                         Epic epic = new Epic(name, description);
                         epic.setId(id);
                         epic.setStatus(status);
                         this.id = id;
                         super.addEpic(epic);
                     }
-                    if (TypeTask.SUBTASK.equals(type)) {
+                    if ("SUBTASK".equals(parts[1])) {
+                        StatusTask status = StatusTask.valueOf(parts[3]);
                         int epicId = Integer.parseInt(parts[5]);
                         SubTask subTask = new SubTask(name, description, status, epicId);
                         subTask.setId(id);
                         this.id = id;
                         super.addSubTask(subTask);
                     }
-                } catch (IllegalArgumentException exp) {
-                    for (String str : parts) {
-                        getTask(Integer.parseInt(str));
-                    }
                 }
             }
         }
     }
-}
