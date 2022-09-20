@@ -9,26 +9,17 @@ import task.Task;
 public class Main {
 
     public static void main(String[] args) {
-        TaskManager manager = Managers.getDefault();
-
+        FileBackedTasksManager manager = Managers.getBacked();
+        manager.loadFromFile();
 
         //Ввод начальных задач
-        Task taskOne = new Task("TaskOne", "testTaskOne", StatusTask.NEW);
-        Task taskTwo = new Task("TaskTwo", "testTaskTwo", StatusTask.IN_PROGRESS);
-        SubTask subTaskOne = new SubTask("one", "testSubTaskOne", StatusTask.DONE, 6);
-        SubTask subTaskTwo = new SubTask("two", "testSubTuskTwo", StatusTask.NEW, 6);
-        SubTask subTaskThree = new SubTask("three", "testSubTuskTwo", StatusTask.NEW, 6);
-        Epic epicOne = new Epic("EpicOne", "test1");
-        Epic epicTwo = new Epic("EpicTwo", "test2");
-
-        manager.addTask(taskOne);
-        manager.addTask(taskTwo);
-        manager.addSubTask(subTaskOne);
-        manager.addSubTask(subTaskTwo);
-        manager.addSubTask(subTaskThree);
-        manager.addEpic(epicOne);
-        manager.addEpic(epicTwo);
-
+        manager.addTask(new Task("TaskOne", "testTaskOne", StatusTask.NEW));
+        manager.addTask(new Task("TaskTwo", "testTaskTwo", StatusTask.IN_PROGRESS));
+        manager.addSubTask(new SubTask("one", "testSubTaskOne", StatusTask.DONE, 6));
+        manager.addSubTask(new SubTask("two", "testSubTuskTwo", StatusTask.NEW, 6));
+        manager.addSubTask(new SubTask("three", "testSubTuskTwo", StatusTask.NEW, 6));
+        manager.addEpic(new Epic("EpicOne", "test1"));
+        manager.addEpic(new Epic("EpicTwo", "test2"));
 
         manager.getTask(2);
         manager.getTask(3);
@@ -37,9 +28,6 @@ public class Main {
         manager.getTask(4);
         manager.getTask(3);
         manager.getTask(6);
-
-        manager.removeIdTask(2);
-        manager.removeIdEpic(6);
 
         manager.getHistory();
 
