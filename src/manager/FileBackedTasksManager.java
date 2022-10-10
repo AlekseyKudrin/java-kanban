@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
     private final static String PATH = "resources\\data.csv";
@@ -90,7 +92,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public void fromString(String line) {
         String[] parts = line.split(",");
         if (!parts[0].equals("")) {
-            if (parts.length != 5 && parts.length != 6) {
+            if (parts.length != 8 && parts.length != 9) {
                 for (String str : parts) {
                     getTask(Integer.parseInt(str));
                 }
@@ -100,7 +102,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     String description = parts[4];
                     if ("TASK".equals(parts[1])) {
                         StatusTask status = StatusTask.valueOf(parts[3]);
-                        Task task = new Task(name, description, status);
+                        LocalDateTime startTime = LocalDateTime.parse(parts[5]);
+                        Duration duration = Duration.parse(parts[6]);
+                        Task task = new Task(name, description, status, startTime, duration);
                         task.setId(id);
                         this.id = id;
                         super.addTask(task);
@@ -116,7 +120,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     if ("SUBTASK".equals(parts[1])) {
                         StatusTask status = StatusTask.valueOf(parts[3]);
                         int epicId = Integer.parseInt(parts[5]);
-                        SubTask subTask = new SubTask(name, description, status, epicId);
+                        LocalDateTime startTime = LocalDateTime.parse(parts[6]);
+                        Duration duration = Duration.parse(parts[7]);
+                        SubTask subTask = new SubTask(name, description, status, epicId, startTime, duration);
                         subTask.setId(id);
                         this.id = id;
                         super.addSubTask(subTask);

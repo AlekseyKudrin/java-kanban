@@ -15,7 +15,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     Node head;
     Node tail;
 
-    Map<Integer, Node> history = new HashMap<>();
+    public Map<Integer, Node> history = new HashMap<>();
 
     @Override
     public List<Integer> getHistory() {

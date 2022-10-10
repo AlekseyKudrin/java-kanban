@@ -4,15 +4,12 @@ import task.Epic;
 import task.SubTask;
 import task.Task;
 
-import java.util.List;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public interface TaskManager {
 
     void getTask(int id);
-
-    //void getSubTask(int id);
-
-    //void getEpic(int id);
 
     void getHistory();
 
@@ -53,4 +50,6 @@ public interface TaskManager {
     void removeAllEpic();
 
     void removeAllSabTask();
+
+    void calculateCompletion(Task task);
 }

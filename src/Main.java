@@ -1,36 +1,32 @@
 import extensions.TaskManager;
+//import manager.FileBackedTasksManager;
 import manager.FileBackedTasksManager;
+import manager.InMemoryTaskManager;
 import manager.Managers;
 import task.Epic;
 import util.StatusTask;
 import task.SubTask;
 import task.Task;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Main {
 
     public static void main(String[] args) {
         FileBackedTasksManager manager = Managers.getBacked();
-        manager.loadFromFile();
 
-        //Ввод начальных задач
-        manager.addTask(new Task("TaskOne", "testTaskOne", StatusTask.NEW));
-        manager.addTask(new Task("TaskTwo", "testTaskTwo", StatusTask.IN_PROGRESS));
-        manager.addSubTask(new SubTask("one", "testSubTaskOne", StatusTask.DONE, 6));
-        manager.addSubTask(new SubTask("two", "testSubTuskTwo", StatusTask.NEW, 6));
-        manager.addSubTask(new SubTask("three", "testSubTuskTwo", StatusTask.NEW, 6));
-        manager.addEpic(new Epic("EpicOne", "test1"));
-        manager.addEpic(new Epic("EpicTwo", "test2"));
+        manager.addTask(new Task("task one", "test task one", StatusTask.NEW
+                , LocalDateTime.of(2022, 9, 5, 10, 1)
+                , Duration.ofMinutes(30)));
 
-        manager.getTask(2);
-        manager.getTask(3);
-        manager.getTask(4);
-        manager.getTask(5);
-        manager.getTask(4);
-        manager.getTask(3);
-        manager.getTask(6);
+        manager.addEpic(new Epic("epic one", "test epic one"));
 
-        manager.getHistory();
-
-
+        manager.addSubTask(new SubTask("subTask one", "test subTask one", StatusTask.NEW, 2
+                , LocalDateTime.of(2022, 9, 1, 5,10)
+                , Duration.ofMinutes(60)));
+        manager.addSubTask(new SubTask("subTask two", "test subTask two", StatusTask.NEW, 2
+                , LocalDateTime.of(2022, 9, 3, 8,20)
+                , Duration.ofMinutes(30)));
     }
 }
