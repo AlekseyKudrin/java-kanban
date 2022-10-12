@@ -1,5 +1,6 @@
 package manager;
 
+import com.sun.java.accessibility.util.AccessibilityListenerList;
 import extensions.HistoryManager;
 import extensions.TaskManager;
 import task.Epic;
@@ -51,6 +52,7 @@ public class InMemoryTaskManager implements TaskManager {
             epics.get(subTask.getEpicId()).setStartTime(list.get(0).getStartTime());
             epics.get(subTask.getEpicId()).setEndTime(list.get(list.size()-1).getEndTime());
             subTasks.put(id++, subTask);
+            epics.get(subTask.getEpicId()).setStatus(assignEpicStatus(subTask.getEpicId()));
         } else {
             subTask.setId(id);
             calculateCompletion(subTask);
@@ -321,13 +323,27 @@ public class InMemoryTaskManager implements TaskManager {
         if (allStatus.isEmpty()) {
             return status;
         } else {
-            for (StatusTask tempStatus : allStatus) {
-                status = tempStatus;
-                if (status.equals(StatusTask.IN_PROGRESS) || status.equals(StatusTask.DONE)) {
-                    return StatusTask.IN_PROGRESS;
+            status = allStatus.get(0);
+            for (StatusTask lastStatus : allStatus) {
+                if (lastStatus.equals(StatusTask.DONE)) {
+                    if (status.equals(StatusTask.DONE)){
+                        status = lastStatus;
+                    } else if (status.equals(StatusTask.NEW)) {
+                        status = StatusTask.IN_PROGRESS;
+                    } else {
+                        status = StatusTask.IN_PROGRESS;
+                    }
+                } else if (lastStatus.equals(StatusTask.NEW)) {
+                    if (status.equals(StatusTask.DONE)) {
+                        status = StatusTask.IN_PROGRESS;
+                    } else if (status.equals(StatusTask.IN_PROGRESS)) {
+                        status = StatusTask.IN_PROGRESS;
+                    }
+                } else if (lastStatus.equals(StatusTask.IN_PROGRESS)){
+                    status = StatusTask.IN_PROGRESS;
                 }
             }
+            return status;
         }
-        return status;
     }
 }
