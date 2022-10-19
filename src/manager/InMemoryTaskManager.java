@@ -22,6 +22,12 @@ public class InMemoryTaskManager implements TaskManager {
 
     public HistoryManager history = Managers.getDefaultHistory();
 
+    private static int idCounter = 1;
+
+    public static void setIdCounter(int idCounter) {
+        InMemoryTaskManager.idCounter = idCounter;
+    }
+
     @Override
     public void addTask(Task task) {
         task.setId(id);

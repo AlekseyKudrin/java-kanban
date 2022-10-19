@@ -1,5 +1,4 @@
-import Http.KVServer;
-import Http.KVTaskClient;
+import http.KVServer;
 import manager.FileBackedTasksManager;
 import manager.Managers;
 

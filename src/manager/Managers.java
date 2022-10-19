@@ -3,6 +3,7 @@ package manager;
 
 import extensions.HistoryManager;
 import extensions.TaskManager;
+import http.HTTPTaskManager;
 
 public class Managers {
 
@@ -16,5 +17,12 @@ public class Managers {
 
     public static FileBackedTasksManager getBacked() {
         return new FileBackedTasksManager();
+    }
+
+    public static HTTPTaskManager loadedHTTPTasksManager() {
+        HTTPTaskManager httpTaskManager = new HTTPTaskManager("http://localhost:8078");
+        httpTaskManager.loadFromFile();
+        //httpTaskManager.loadedFromFileTasksManager();
+        return httpTaskManager;
     }
 }
