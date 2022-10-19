@@ -55,7 +55,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    static String historyToString(HistoryManager manager) {
+    protected static String historyToString(HistoryManager manager) {
         StringBuilder sb = new StringBuilder();
         for (int value : manager.getHistory())
             sb.append(value).append(",");
